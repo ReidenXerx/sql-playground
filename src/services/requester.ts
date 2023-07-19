@@ -1,10 +1,11 @@
-import { RequestMethods } from '../constants'
+import hashMockRequests from 'src/mocks'
+import { RequestMethods, SourceDatabaseName } from '../constants'
 
 type RequestParams = {
   method: RequestMethods
   headers?: Record<string, string>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  body?: Record<string, any> | null
+  body?: { source: SourceDatabaseName; sql: string } | null
 }
 
 export const fetchRequest = async <ReturnType>(
@@ -14,7 +15,6 @@ export const fetchRequest = async <ReturnType>(
   const config: RequestInit = {
     method,
     headers: {
-      'Content-Type': 'application/json',
       ...headers,
     },
   }
@@ -24,7 +24,15 @@ export const fetchRequest = async <ReturnType>(
   }
 
   try {
-    const response = await fetch(url, config)
+    let response = {} as Response
+    if (
+      Object.keys(hashMockRequests).includes(body?.sql ?? '') &&
+      body?.source
+    ) {
+      response = await hashMockRequests[body?.sql ?? ''][body?.source]()
+    } else {
+      response = await fetch(url, config)
+    }
 
     if (!response.ok) {
       throw new Error(`HTTP error! status: ${response.status}`)

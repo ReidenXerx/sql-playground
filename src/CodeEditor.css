@@ -1,0 +1,21 @@
+/* Customize the color of SQL keywords */
+.token.keyword {
+  color: #ff0000;
+}
+
+/* Customize the color of SQL strings */
+.token.string {
+  color: #00ff00;
+}
+
+/* Customize the color of SQL comments */
+.token.comment {
+  color: #888888;
+}
+
+.token.operator {
+  color: #ff00ff; /* Custom color for operator symbols */
+  font-weight: bold; /* Custom font weight */
+  background-color: transparent !important;
+  /* Add more custom styles as needed */
+}
