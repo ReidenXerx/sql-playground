@@ -5,7 +5,7 @@ import { defineConfig } from 'vite'
 export default defineConfig({
   plugins: [reactRefresh(), tsconfigPaths()],
   root: './',
-  base: './sql-playground/',
+  base: '/sql-playground/',
   server: {
     // Enable open on the local network.
     open: true,
