@@ -16,7 +16,7 @@ const sqlAllowedRegexp = new RegExp(
   'g',
 )
 
-const GradientBorderBox = styled(Box)(({ theme }) => ({
+const GradientBorderBox = styled(Box)(({ theme: _theme }) => ({
   position: 'relative',
   '&:before': {
     content: '""',

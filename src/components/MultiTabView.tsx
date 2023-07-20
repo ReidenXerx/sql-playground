@@ -1,14 +1,9 @@
 // MultiTabView.tsx
 import { Tabs, Tab, Box, CircularProgress, Typography } from '@mui/material'
 import { useState } from 'react'
-import styled from '@emotion/styled'
 import VirtualizedTable from './VirtualizedTable'
 import { LoaderStates, RawOutput, RawOutputBySource } from 'src/types'
 import { SourceDatabaseName } from 'src/constants'
-
-const StyledTab = styled(Tab)`
-  border-radius: 10px;
-`
 
 type MultiTabViewTableProps = {
   rawOutputBySource?: RawOutputBySource

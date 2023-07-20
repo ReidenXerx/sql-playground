@@ -1,4 +1,4 @@
-import { useContext } from 'react'
-import { ContextType, CustomContext } from '../Context'
+// import { useContext } from 'react'
+// import { ContextType, CustomContext } from '../Context'
 
-export const useCustomContext = (): ContextType => useContext(CustomContext)
+// export const useCustomContext = (): ContextType => useContext(CustomContext)
