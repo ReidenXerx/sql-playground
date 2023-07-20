@@ -8,6 +8,11 @@ npm run +
 "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
 "preview": "vite preview"
 ```
+also hold in mind that you should use 
+```sql
+select * from users
+```
+query for getting result because there is mocked requests
 
 ## Enhancements
 
