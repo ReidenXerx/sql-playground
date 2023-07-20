@@ -19,7 +19,7 @@ const VirtualizedTable = ({ rawOutput }: VirtualizedTable) => {
       const value = values[indexV]
       robustOutput.push({})
       for (const [index, key] of keys.entries()) {
-        robustOutput[indexV][key] = value[index]
+        robustOutput[indexV][key] = value?.[index] ?? ''
       }
     }
     setRobustOutput(robustOutput)
@@ -42,12 +42,12 @@ const VirtualizedTable = ({ rawOutput }: VirtualizedTable) => {
           height={35}
           rowCount={1}
           rowHeight={35}
-          width={500}
           style={{
             color: 'white',
             backgroundColor: '#FE6B8B',
             marginLeft: '10px',
           }}
+          width={rawOutput[0].length * 150}
         >
           {HeaderCell}
         </Grid>
@@ -57,8 +57,8 @@ const VirtualizedTable = ({ rawOutput }: VirtualizedTable) => {
           height={300}
           rowCount={robustOutput.length}
           rowHeight={35}
-          width={300}
           style={{ color: 'white', marginLeft: '10px' }}
+          width={rawOutput[0].length * 150}
         >
           {Cell}
         </Grid>

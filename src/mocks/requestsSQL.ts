@@ -1,8 +1,8 @@
 export const successSimpleSampleSQL = async () => ({
   json: async () => [
-    ['username', 'email'],
-    ['bar', 'bar.haim@pvml.com'],
-    ['shlomi', 's@pvml.com'],
+    ['username', 'email', 'age', 'sex'],
+    ['bar', 'bar.haim@pvml.com', '37', 'male'],
+    ['shlomi', 's@pvml.com', '43', 'male'],
   ],
   ok: true,
 })

@@ -1,8 +1,8 @@
 export const successSimpleSamplePVML = async () => ({
   json: async () => [
-    ['username', 'email'],
-    ['vadim', 'bar.vadim@pvml.com'],
-    ['shlomi.lysenko', 'lysenko@pvml.com'],
+    ['username', 'email', 'age', 'sex'],
+    ['vadim', 'bar.vadim@pvml.com', '37', 'male'],
+    ['shlomi.lysenko', 'lysenko@pvml.com', '43', 'male'],
   ],
   ok: true,
 })
