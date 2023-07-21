@@ -1,23 +1,36 @@
 // MultiTabView.tsx
 import { Tabs, Tab, Box, CircularProgress, Typography } from '@mui/material'
-import { useState } from 'react'
 import VirtualizedTable from './VirtualizedTable'
-import { LoaderStates, RawOutput, RawOutputBySource } from 'src/types'
+import {
+  LoaderStates,
+  RawOutput,
+  RawOutputBySource,
+  SourceDatabaseModes,
+} from 'src/types'
 import { SourceDatabaseName } from 'src/constants'
+
+type SetSourceDatabaseMode = (state: SourceDatabaseModes) => SourceDatabaseModes
 
 type MultiTabViewTableProps = {
   rawOutputBySource?: RawOutputBySource
   loaderStates: LoaderStates
+  sourceDatabaseMode: SourceDatabaseModes
+  setSourceDatabaseMode: (
+    newDatabaseMode: SourceDatabaseModes | SetSourceDatabaseMode,
+  ) => void
 }
 
 export const MultiTabView = ({
   rawOutputBySource,
   loaderStates,
+  sourceDatabaseMode,
+  setSourceDatabaseMode,
 }: MultiTabViewTableProps) => {
-  const [value, setValue] = useState(0)
-
-  const handleChange = (_event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue)
+  const handleChange = (
+    _event: React.SyntheticEvent,
+    newValue: SourceDatabaseModes,
+  ) => {
+    setSourceDatabaseMode(newValue)
   }
 
   const getContent = (source: SourceDatabaseName) => {
@@ -47,7 +60,7 @@ export const MultiTabView = ({
     <Box borderBottom="2px solid white" sx={{ width: '45%', height: '350px' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs
-          value={value}
+          value={sourceDatabaseMode}
           onChange={handleChange}
           aria-label="basic tabs example"
           TabIndicatorProps={{ style: { backgroundColor: 'white' } }}
@@ -73,7 +86,9 @@ export const MultiTabView = ({
         </Tabs>
       </Box>
       {getContent(
-        value === 0 ? SourceDatabaseName.SQL : SourceDatabaseName.PVML,
+        sourceDatabaseMode === 0
+          ? SourceDatabaseName.SQL
+          : SourceDatabaseName.PVML,
       )}
     </Box>
   )

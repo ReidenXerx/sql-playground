@@ -7,3 +7,5 @@ export type LoaderStates = {
 export type RawOutput = Array<Array<string>>
 
 export type RawOutputBySource = { [key in SourceDatabaseName]: RawOutput }
+
+export type SourceDatabaseModes = 0 | 1

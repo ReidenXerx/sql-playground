@@ -6,3 +6,17 @@ export const successSimpleSamplePVML = async () => ({
   ],
   ok: true,
 })
+
+export const successLongSimpleSamplePVML = () =>
+  new Promise((resolve) => {
+    setTimeout(() => {
+      resolve({
+        json: async () => [
+          ['username', 'email', 'age', 'sex'],
+          ['bar', 'bar.haim@pvml.com', '47', 'male'],
+          ['shlomi', 's@pvml.com', '63', 'male'],
+        ],
+        ok: true,
+      })
+    }, 5000)
+  })

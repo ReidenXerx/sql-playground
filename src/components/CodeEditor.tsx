@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import styled from '@emotion/styled'
 import CodeEditor from 'react-simple-code-editor'
 import { highlight, languages } from 'prismjs'
@@ -7,7 +7,12 @@ import 'prismjs/themes/prism.css'
 import { Box, Button, Typography } from '@mui/material'
 import { fetchRequest } from 'src/services/requester'
 import { RequestMethods, SourceDatabaseName, apiUrl } from 'src/constants'
-import { LoaderStates, RawOutput, RawOutputBySource } from 'src/types'
+import {
+  LoaderStates,
+  RawOutput,
+  RawOutputBySource,
+  SourceDatabaseModes,
+} from 'src/types'
 import '../CodeEditor.css'
 import { toast } from 'react-toastify'
 
@@ -42,15 +47,19 @@ type SetRawOutputBySource = (
 type CodeEditorComponentProps = {
   setLoaderStates: (loaderStates: LoaderStates | SetStateFromPrevious) => void
   setRawOutputBySource: (
-    rawOutputBySource: RawOutputBySource | SetRawOutputBySource,
+    rawOutputBySource: RawOutputBySource | SetRawOutputBySource | undefined,
   ) => void
+  sourceDatabaseMode: SourceDatabaseModes
 }
 
 const CodeEditorComponent = ({
   setLoaderStates,
   setRawOutputBySource,
+  sourceDatabaseMode,
 }: CodeEditorComponentProps) => {
   const [query, setQuery] = useState('')
+  const controller = useMemo(() => new AbortController(), [])
+  const signal = useMemo(() => controller.signal, [controller])
 
   const handleChange = (newValue: string) => {
     const cleanedValue = newValue.replaceAll(sqlAllowedRegexp, '')
@@ -61,34 +70,39 @@ const CodeEditorComponent = ({
   }
 
   const onClickPlay = () => {
-    setLoaderStates({
-      [SourceDatabaseName.SQL]: true,
-      [SourceDatabaseName.PVML]: true,
+    controller.abort()
+    setRawOutputBySource(undefined)
+    const source = Object.values(SourceDatabaseName)[sourceDatabaseMode]
+    setLoaderStates((state: LoaderStates) => ({
+      ...state,
+      [source]: true,
+    }))
+    fetchRequest<RawOutput>(apiUrl, {
+      method: RequestMethods.post,
+      body: {
+        source,
+        sql: query,
+      },
+      signal,
     })
-    for (const source of Object.values(SourceDatabaseName)) {
-      fetchRequest<RawOutput>(apiUrl, {
-        method: RequestMethods.post,
-        body: { source, sql: query },
+      .then((data: RawOutput) => {
+        setRawOutputBySource(
+          (rawOutputBySource) =>
+            ({
+              ...(rawOutputBySource ?? {}),
+              [source]: data,
+            } as RawOutputBySource),
+        )
       })
-        .then((data: RawOutput) => {
-          setRawOutputBySource(
-            (rawOutputBySource) =>
-              ({
-                ...(rawOutputBySource ?? {}),
-                [source]: data,
-              } as RawOutputBySource),
-          )
-        })
-        .catch(() =>
-          toast.error(`Wow, it seems request for ${source} was failed`),
-        )
-        .finally(() =>
-          setLoaderStates((state: LoaderStates) => ({
-            ...state,
-            [source]: false,
-          })),
-        )
-    }
+      .catch(() =>
+        toast.error(`Wow, it seems request for ${source} was failed`),
+      )
+      .finally(() =>
+        setLoaderStates((state: LoaderStates) => ({
+          ...state,
+          [source]: false,
+        })),
+      )
   }
 
   return (

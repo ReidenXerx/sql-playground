@@ -6,17 +6,19 @@ type RequestParams = {
   headers?: Record<string, string>
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   body?: { source: SourceDatabaseName; sql: string } | null
+  signal?: AbortSignal
 }
 
 export const fetchRequest = async <ReturnType>(
   url: string,
-  { method, headers = {}, body = null }: RequestParams,
+  { method, headers = {}, body = null, signal }: RequestParams,
 ): Promise<ReturnType> => {
   const config: RequestInit = {
     method,
     headers: {
       ...headers,
     },
+    signal,
   }
 
   if (body) {

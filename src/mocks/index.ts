@@ -1,5 +1,11 @@
-import { successSimpleSampleSQL } from './requestsSQL'
-import { successSimpleSamplePVML } from './requestsPVML'
+import {
+  successSimpleSampleSQL,
+  successLongSimpleSampleSQL,
+} from './requestsSQL'
+import {
+  successSimpleSamplePVML,
+  successLongSimpleSamplePVML,
+} from './requestsPVML'
 import { SourceDatabaseName } from 'src/constants'
 
 const hashMockRequests: {
@@ -8,6 +14,10 @@ const hashMockRequests: {
   ['select * from users']: {
     [SourceDatabaseName.SQL]: successSimpleSampleSQL,
     [SourceDatabaseName.PVML]: successSimpleSamplePVML,
+  },
+  ['select * from usersLong']: {
+    [SourceDatabaseName.SQL]: successLongSimpleSampleSQL,
+    [SourceDatabaseName.PVML]: successLongSimpleSamplePVML,
   },
 }
 
